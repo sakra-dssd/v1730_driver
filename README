@@ -1,0 +1,45 @@
+[使い方]
+$sudo ./babies EFN
+・FADCのパラメータ設定もbabies内部で実行している
+・caenvmebabies.cのread_data関数がFADCからデータを読み出す部分
+　　・FADCでdead time freeにデータ取得する都合上、2箇所でread_data関数を呼び出している
+　　　　1.run中、FADCからのinterruptがかかった時
+　　　　2.babiconでrunをstopした時
+　　　　　FADCのバッファ内に未読み出しのデータが溜まっているので、なくなるまでread_dataを繰り返す
+　　　　　全読み出し終了後に読み出したイベント数を表示するようになっているので、
+　　　　　bibicon側のevent build numberと見比べると安心
+・babiesがデータ転送用に確保するバッファと比べてFADCの最大データサイズが大きい場合にはErrorを表示するようになっている
+　zero suppressionを使う場合、最大データサイズが送られてくることはないとは思うが、念の為
+・babiesのデータ転送のしきい値よりFADCのデータサイズが大きい時にはWarningを表示するようになっているが、
+　毎イベントごとにbabildにデータ転送することになるだけなので気にしなくてもいいかもしれない
+・BUSY信号(FADCのchどこか1つでもバッファが一杯の時)はTRG_OUTから出力している
+
+[babiesのソースコード]
+caenvmebabies.c・・・シンボリックリンク。使うバージョンに張替え。
+v1 : 通常版
+v2 : 複数イベント読み出し対応
+v3 : 作りかけなので、使えない
+
+
+[設定ファイル]
+１．接続の設定・・・connection.cfg
+　　書き換える可能性があるのは、
+	L1. N_FADC_BOARD : FADCの全台数
+	L3. SELF_TRIG    : self trigger
+	L4. BABIES EFN N_BOARD
+	    EFN : babiesのEFN
+	    N_BOARD : このbabiesプロセスで扱うFADCの枚数
+	L5. BOARD 0 0 0
+	    FADCへの接続方法
+		BoardIndex : 全FADCの通し番号
+		LinkNum    : A3818のポート番号
+		ConetNode  : daisy chain内の順番
+
+２．パラメータ設定・・・default.cfg, v1730_borad_n.cfg
+　　全FADC共通のパラメータ : default.cfg
+　　BoardIndex=nのFADCのパラメータ : v1730_board_n.cfg
+　　読み込み順がdefault->v1730_board_nなので、v1730_board_nに書いてある項目が優先して採用される
+　　各パラメータの内容はコメントもしくは、CAEN DPP-ZLEのマニュアル参照
+
+[その他]
+・SEGIDをdetector=BoardIndex、module=V1730ZLE(61)にしているので、Analyzerに合わせて適宜変更
