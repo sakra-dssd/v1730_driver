@@ -41,6 +41,10 @@ v3 : 作りかけなので、使えない
 　　読み込み順がdefault->v1730_board_nなので、v1730_board_nに書いてある項目が優先して採用される
 　　各パラメータの内容はコメントもしくは、CAEN DPP-ZLEのマニュアル参照
 
+[ボードへのケーブル接続]
+外部トリガーで動作させる場合は、"TRG IN"にNIM信号を送る。
+"TRG OUT"からはbufferが一杯になると信号が出力される。これをtriggerへのVETOとして使用する。
+
 [複数のV1730を読み出す場合]
 1. clock同期
    ボード側面でmasterとなるmodule 1台は"CLK SOURCE"のスイッチを"INT", それ以外のmoduleでは"EXT"に設定。
