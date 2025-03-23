@@ -41,5 +41,13 @@ v3 : 作りかけなので、使えない
 　　読み込み順がdefault->v1730_board_nなので、v1730_board_nに書いてある項目が優先して採用される
 　　各パラメータの内容はコメントもしくは、CAEN DPP-ZLEのマニュアル参照
 
+[複数のV1730を読み出す場合]
+1. clock同期
+   ボード側面でmasterとなるmodule 1台は"CLK SOURCE"のスイッチを"INT", それ以外のmoduleでは"EXT"に設定。
+   フロントパネルで"CLK OUT"から"CLK IN"へ数珠繋ぎで接続する。
+
+2. control信号
+   フロントパネルでmasterとなるmoduleのLVDS ch4--7を下流のmoduleのch0--3へ数珠繋ぎに接続する。
+
 [その他]
 ・SEGIDをdetector=BoardIndex、module=V1730ZLE(61)にしているので、Analyzerに合わせて適宜変更
