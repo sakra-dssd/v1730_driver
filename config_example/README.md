@@ -1,1 +1,1 @@
--JAEA2022Mar: 8 FADC with 3 ports of optical link, daisy chain
+- JAEA2022Mar: 8 FADC with 3 ports of optical link, daisy chain
