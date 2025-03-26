@@ -53,5 +53,47 @@ v3 : 作りかけなので、使えない
 2. control信号
    フロントパネルでmasterとなるmoduleのLVDS ch4--7を下流のmoduleのch0--3へ数珠繋ぎに接続する。
 
+[babirl DAQの動かし方]
+1. host PCとPCIeボードがささっているPCが同じとき
+
+   host PCでの操作
+   $> sudo babinfo
+   $> sudo babild -l 1
+   $> sudo ./babies 1
+   $> sudo ./babies 2
+   (以下、使用するbabiesのプロセスを立ち上げる)
+
+   $>babicon
+   localhost> seteflist 1 add localhost FADC1
+   localhost> seteflist 2 add localhost FADC2
+   localhost> seteflist 1 on
+   localhost> seteflist 2 on
+   localhost> setesconfig 1 host localhost
+   localhost> setesconfig 2 host localhost
+   localhost> nssta  (for no save start)
+   localhost> wth (for saving data)
+   localhost> start (for saving data)
+
+
+2. host PCとPCIeボードがささっているPCが異なるとき
+   host PCとPCIeボードPCのIPをそれぞれ、172.16.210.21 (sakrasub), 172.16.210.20 (sakramain) とする。
+
+   PCIe PCでの操作
+   $> sudo ./babies 1
+   $> sudo ./babies 2
+
+   host PCでの操作
+   $> sudo babinfo
+   $> sudo babild -l 1
+   $> babicon
+   localhost> seteflist 1 add 172.16.210.20 FADC1
+   localhost> seteflist 2 add 172.16.210.20 FADC2
+   localhost> seteflist 1 on
+   localhost> seteflist 2 on
+   localhost> setesconfig 1 host 172.16.210.21
+   localhost> setesconfig 2 host 172.16.210.21
+   
+   
+
 [その他]
 ・SEGIDをdetector=BoardIndex、module=V1730ZLE(61)にしているので、Analyzerに合わせて適宜変更
